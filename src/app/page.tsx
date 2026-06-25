@@ -13,6 +13,10 @@ export default function Home() {
     const [pixelSize, setPixelSize] = useState(32);
     const [content, setContent] = useState('');
     const [diaries, setDiaries] = useState<Diary[]>([]);
+    const [selectedDate, setSelectedDate] = useState('');
+
+    // 다이어리 작성용 날짜 (지난 날짜도 작성이 가능하도록)
+    const [diaryDate, setDiaryDate] = useState(new Date().toISOString().split('T')[0]);
 
     const handleSave = () => {
         // 이미지 또는 내용이 없으면 저장하지 않음
@@ -23,7 +27,7 @@ export default function Home() {
 
         const newDiary: Diary = {
             id: crypto.randomUUID(),
-            date: new Date().toISOString().split('T')[0],
+            date: diaryDate,
             imageUrl,
             content,
             pixelSize,
@@ -65,9 +69,17 @@ export default function Home() {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedDiaries));
     };
 
+    const filteredDiaries = selectedDate ? diaries.filter((diary) => diary.date === selectedDate) : diaries;
+
     return (
         <main>
             <h1>Pixel Diary</h1>
+
+            <input type="date" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} />
+
+            <label>일기 날짜</label>
+
+            <input type="date" value={diaryDate} onChange={(e) => setDiaryDate(e.target.value)} />
 
             <UploadImage imageUrl={imageUrl} setImageUrl={setImageUrl} />
 
@@ -86,7 +98,7 @@ export default function Home() {
             </button>
 
             {/* 결과 확인용 */}
-            {diaries.map((diary) => (
+            {filteredDiaries.map((diary) => (
                 <DiaryCard key={diary.id} diary={diary} onDelete={handleDelete} />
             ))}
         </main>

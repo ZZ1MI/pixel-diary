@@ -49,11 +49,11 @@ export default function PixelCanvas({ imageUrl, pixelSize }: PixelCanvasProps) {
             tempCanvas.width = pixelSize;
             tempCanvas.height = pixelSize;
 
-            // 원본 → 16x16
+            // 원본 이미지를 pixelSize 크기로 축소
 
             tempCtx.drawImage(img, 0, 0, pixelSize, pixelSize);
 
-            // 16x16 → 256x256
+            // 축소된 이미지를 다시 확대하여 도트 효과 적용
             ctx.drawImage(tempCanvas, 0, 0, 256, 256);
         };
     }, [imageUrl, pixelSize]);

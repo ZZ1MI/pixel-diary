@@ -1,9 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { Diary } from '@/types/diary';
 import PixelCanvas from '@/components/PixelCanvas/PixelCanvas';
 import UploadImage from '@/components/UploadImage/UploadImage';
-import { Diary } from '@/types/diary';
+import DiaryCard from '@/components/DiaryCard/DiaryCard';
 
 const STORAGE_KEY = 'pixel-diary';
 
@@ -25,6 +26,7 @@ export default function Home() {
             date: new Date().toISOString().split('T')[0],
             imageUrl,
             content,
+            pixelSize,
             createdAt: new Date().toISOString(),
         };
 
@@ -55,6 +57,14 @@ export default function Home() {
         }
     }, []);
 
+    const handleDelete = (id: string) => {
+        const updatedDiaries = diaries.filter((diary) => diary.id !== id);
+
+        setDiaries(updatedDiaries);
+
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedDiaries));
+    };
+
     return (
         <main>
             <h1>Pixel Diary</h1>
@@ -77,11 +87,7 @@ export default function Home() {
 
             {/* 결과 확인용 */}
             {diaries.map((diary) => (
-                <div key={diary.id}>
-                    <p>{diary.date}</p>
-                    <img src={diary.imageUrl} alt="일기 이미지" width={150} />
-                    <p>{diary.content}</p>
-                </div>
+                <DiaryCard key={diary.id} diary={diary} onDelete={handleDelete} />
             ))}
         </main>
     );

@@ -4,4 +4,5 @@ export interface Diary {
     imageUrl: string;
     content: string;
     createdAt: string;
+    pixelSize: number;
 }

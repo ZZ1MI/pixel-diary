@@ -7,6 +7,20 @@ import UploadImage from '@/components/UploadImage/UploadImage';
 export default function Home() {
     const [imageUrl, setImageUrl] = useState('');
     const [pixelSize, setPixelSize] = useState(32);
+    const [content, setContent] = useState('');
+
+    // 처음엔 localStorage 사용
+    const handleSave = () => {
+        const diary = {
+            id: crypto.randomUUID(),
+            date: new Date().toISOString(),
+            imageUrl,
+            content,
+            createdAt: new Date().toISOString(),
+        };
+
+        console.log(diary);
+    };
 
     return (
         <main>
@@ -20,6 +34,12 @@ export default function Home() {
             </div>
 
             {imageUrl && <PixelCanvas imageUrl={imageUrl} pixelSize={pixelSize} />}
+
+            <textarea value={content} onChange={(e) => setContent(e.target.value)} placeholder="오늘 하루를 기록해보세요." />
+
+            <button type="button" onClick={handleSave}>
+                저장
+            </button>
         </main>
     );
 }
